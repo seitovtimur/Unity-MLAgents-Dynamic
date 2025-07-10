@@ -5,6 +5,8 @@ public class SegmentRouteBuilder : MonoBehaviour
 {
     [SerializeField] private List<GameObject> segmentPrefabs;
     [SerializeField] private int segmentCount = 5;
+    [SerializeField] private GameObject goalPrefab;
+
 
     private Transform currentEndPoint;
 
@@ -19,17 +21,17 @@ public class SegmentRouteBuilder : MonoBehaviour
     {
         ClearLevel();
 
-        // Начинаем со стартовой позиции
+        // РќР°С‡РёРЅР°РµРј СЃРѕ СЃС‚Р°СЂС‚РѕРІРѕР№ РїРѕР·РёС†РёРё
         currentEndPoint = this.transform;
 
         for (int i = 0; i < segmentCount; i++)
         {
             GameObject prefab = segmentPrefabs[Random.Range(0, segmentPrefabs.Count)];
 
-            // Инстанс сегмента
+            // РРЅСЃС‚Р°РЅСЃ СЃРµРіРјРµРЅС‚Р°
             GameObject segment = Instantiate(prefab);
 
-            // Поиск точек соединения
+            // РџРѕРёСЃРє С‚РѕС‡РµРє СЃРѕРµРґРёРЅРµРЅРёСЏ
             Transform start = segment.transform.Find("StartPoint");
             Transform end = segment.transform.Find("EndPoint");
 
@@ -39,24 +41,26 @@ public class SegmentRouteBuilder : MonoBehaviour
                 return;
             }
 
-            // --- 1. Совмещение StartPoint с текущим EndPoint ---
-            // A) Позиция
-            segment.transform.position = currentEndPoint.position;
+            // 1. РћР±РЅСѓР»СЏРµРј РїРѕР·РёС†РёСЋ Рё РїРѕРІРѕСЂРѕС‚ СЃРµРіРјРµРЅС‚Р°
+            segment.transform.position = Vector3.zero;
+            segment.transform.rotation = Quaternion.identity;
 
-            // B) Вращение
-            Quaternion rotationDelta = Quaternion.FromToRotation(start.forward, currentEndPoint.forward);
-            segment.transform.rotation = rotationDelta * segment.transform.rotation;
-
-            // C) Коррекция смещения
+            // 2. РЎС‡РёС‚Р°РµРј СЃРјРµС‰РµРЅРёРµ РѕС‚ С†РµРЅС‚СЂР° СЃРµРіРјРµРЅС‚Р° РґРѕ StartPoint (РІ РјРёСЂРѕРІС‹С… РєРѕРѕСЂРґРёРЅР°С‚Р°С…)
             Vector3 offset = start.position - segment.transform.position;
-            segment.transform.position -= offset;
 
-            // --- 2. Устанавливаем новый текущий EndPoint ---
+            // 3. Р’СЂР°С‰РµРЅРёРµ СЃРµРіРјРµРЅС‚Р°, С‡С‚РѕР±С‹ РµРіРѕ StartPoint.forward СЃРѕРІРїР°Р» СЃ С‚РµРєСѓС‰РёРј EndPoint.forward (Рё up)
+            segment.transform.rotation = Quaternion.LookRotation(currentEndPoint.forward, currentEndPoint.up);
+
+            // 4. РЎРґРІРёРіР°РµРј СЃРµРіРјРµРЅС‚ С‚Р°Рє, С‡С‚РѕР±С‹ StartPoint СЃРѕРІРїР°Р» СЃ С‚РµРєСѓС‰РµР№ С‚РѕС‡РєРѕР№
+            segment.transform.position = currentEndPoint.position - (start.position - segment.transform.position);
+
+            // 5. РћР±РЅРѕРІР»СЏРµРј С‚РµРєСѓС‰РёР№ EndPoint
             currentEndPoint = segment.transform.Find("EndPoint");
 
             spawnedSegments.Add(segment);
         }
     }
+
 
     public void ClearLevel()
     {
