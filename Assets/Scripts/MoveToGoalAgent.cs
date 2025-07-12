@@ -69,13 +69,13 @@ public class MoveToGoalAgent : Agent
         Debug.Log("OnEpisodeBegin()");
 
         //ГЕНЕРАЦИЯ УРОВНЯ
-        if (_segmentRouteBuilder == null)
-        {
-            Debug.LogError("SegmentRouteBuilder is not assigned. Please assign it in the inspector.");
-            return;
-        }
+        // if (_segmentRouteBuilder == null)
+        // {
+        //     Debug.LogError("SegmentRouteBuilder is not assigned. Please assign it in the inspector.");
+        //     return;
+        // }
 
-        _segmentRouteBuilder?.RegenerateLevel();
+        // _segmentRouteBuilder?.RegenerateLevel();
         
 
         if (_segmentRouteBuilder != null && _segmentRouteBuilder.GoalTransform != null)
@@ -286,7 +286,13 @@ public class MoveToGoalAgent : Agent
 
         CumulativeRewared = GetCumulativeReward();
 
-        //_segmentRouteBuilder?.RegenerateLevel();
+        if (_segmentRouteBuilder == null)
+        {
+            Debug.LogError("SegmentRouteBuilder is not assigned. Please assign it in the inspector.");
+            return;
+        }
+
+        _segmentRouteBuilder?.RegenerateLevel();
 
         EndEpisode();
     }
