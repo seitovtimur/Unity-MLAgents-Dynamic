@@ -59,6 +59,12 @@ public class SegmentRouteBuilder : MonoBehaviour
 
             spawnedSegments.Add(segment);
         }
+
+        if (goalPrefab != null && currentEndPoint != null)
+        {
+            GameObject goal = Instantiate(goalPrefab, currentEndPoint.position, currentEndPoint.rotation);
+            spawnedSegments.Add(goal);
+        }
     }
 
 
@@ -68,6 +74,7 @@ public class SegmentRouteBuilder : MonoBehaviour
         {
             if (segment != null)
                 Destroy(segment);
+                //Destroy(goalPrefab);
         }
 
         spawnedSegments.Clear();
