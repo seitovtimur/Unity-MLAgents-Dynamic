@@ -16,10 +16,7 @@ public class MoveToGoalAgent : Agent
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private float _rotationSpeed = 180f;
     [SerializeField] private float _jumpForce = 5f;
-    //[SerializeField] private float _goalRandomSpawnRange = 5f;
-    //[SerializeField] private ObstacleGenerator _obstacleGenerator;
-    //[SerializeField] private List<ObstacleGenerator> _obstacleGenerators;
-
+    
     [SerializeField] private CheckpointsManager _checkpointManager;
     [SerializeField] private SegmentRouteBuilder _segmentRouteBuilder;
 
@@ -27,9 +24,6 @@ public class MoveToGoalAgent : Agent
     private Rigidbody _rb;
     private Vector3 _startPos;
     private bool _isGrounded = true;
-    //private ObstacleGenerator _obstacleGenerator;
-
-
     private Renderer _renderer;
 
 
@@ -58,12 +52,10 @@ public class MoveToGoalAgent : Agent
         _rb = GetComponent<Rigidbody>();
         _startPos = transform.position;
 
-        //_checkpointManager = FindFirstObjectByType<CheckpointsManager>();
+        
         _currentCheckpointIndex = 0;
         _prevCheckpointDistance = float.MaxValue;
-        //_obstacleGenerator = FindFirstObjectByType<ObstacleGenerator>();
-
-
+        
 
         if (_groundRenderer != null)
         {
@@ -71,14 +63,30 @@ public class MoveToGoalAgent : Agent
         }
     }
 
-    //private void FixedUpdate()
-    //{
-    //    _isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f, LayerMask.GetMask("Ground"));
-    //}
 
     public override void OnEpisodeBegin()
     {
         Debug.Log("OnEpisodeBegin()");
+
+        //ГЕНЕРАЦИЯ УРОВНЯ
+        if (_segmentRouteBuilder == null)
+        {
+            Debug.LogError("SegmentRouteBuilder is not assigned. Please assign it in the inspector.");
+            return;
+        }
+
+        _segmentRouteBuilder?.RegenerateLevel();
+        
+
+        if (_segmentRouteBuilder != null && _segmentRouteBuilder.GoalTransform != null)
+        {
+            _goal = _segmentRouteBuilder.GoalTransform;
+        }
+        else
+        {
+            // Эта ошибка теперь будет означать серьезную проблему в логике
+            Debug.LogError("SegmentRouteBuilder не смог предоставить ссылку на новую цель!");
+        }
 
         if (_groundRenderer != null && CumulativeRewared != 0f)
         {
@@ -107,8 +115,6 @@ public class MoveToGoalAgent : Agent
         CurrentEpisode++;
         CumulativeRewared = 0f;
         _renderer.material.color = Color.cyan;
-
-        //SpawnObjects();
     }
 
     private IEnumerator FlashGround(Color targetColor, float duration)
@@ -125,24 +131,25 @@ public class MoveToGoalAgent : Agent
         }
     }
 
-    //private void SpawnObjects()
-    //{
-    //    transform.localRotation = Quaternion.identity;
-    //    transform.localPosition = new Vector3(0f, 1f, 0f);
-
-    //    float randomAgnle = Random.Range(0f, 360f);
-    //    Vector3 randomDirection = Quaternion.Euler(0f, randomAgnle, 0f) * Vector3.forward;
-
-
-    //    float randomDistance = Random.Range(1f, _goalRandomSpawnRange);
-
-    //    Vector3 goalPosition = transform.localPosition + randomDirection * randomDistance;
-
-    //    _goal.localPosition = new Vector3(goalPosition.x, 1f, goalPosition.z);
-    //}
-
     public override void CollectObservations(VectorSensor sensor)
     {
+
+        if (_goal == null)
+        {
+            // Если цели по какой-то причине нет, мы не можем собрать наблюдения.
+            // Отправляем 8 нулевых значений, чтобы вектор наблюдений имел правильный размер.
+            sensor.AddObservation(0f); // goalX
+            sensor.AddObservation(0f); // goalZ
+            sensor.AddObservation(0f); // agentX
+            sensor.AddObservation(0f); // agentZ
+            sensor.AddObservation(0f); // agentRot
+            sensor.AddObservation(0f); // velocityX
+            sensor.AddObservation(0f); // velocityZ
+            sensor.AddObservation(0f); // isGrounded
+            return; // Выходим из метода, чтобы избежать ошибки
+        }
+        
+
         float goalPositionX_normalized = _goal.localPosition.x / 5f;
         float goalPositionZ_normalized = _goal.localPosition.z / 5f;
 
@@ -155,13 +162,13 @@ public class MoveToGoalAgent : Agent
         float agentVelocityY_normalized = _rb.linearVelocity.z / 5f;
 
 
+        
+
         sensor.AddObservation(goalPositionX_normalized);
         sensor.AddObservation(goalPositionZ_normalized);
         sensor.AddObservation(agentPosX_normalized);
         sensor.AddObservation(agentPosZ_normalized);
         sensor.AddObservation(agentRotation_normalized);
-
-        //sensor.AddObservation(_rb.linearVelocity); //not normalized
 
         sensor.AddObservation(agentVelocityX_normalized);
         sensor.AddObservation(agentVelocityY_normalized);
@@ -197,8 +204,6 @@ public class MoveToGoalAgent : Agent
         //Move the agent using the action
         MoveAgent(actions);
 
-        //MoveAgent(actions.DiscreteActions);
-
         //Penalty given each step to encourage agent to finish quickly
         AddReward(-2f / MaxStep);
 
@@ -206,37 +211,6 @@ public class MoveToGoalAgent : Agent
         //{
         //    AddReward(-0.01f);
         //}
-
-
-        //// ������� �� ��������� ��������� ����� Raycast
-        //Transform nextCheckpoint = _checkpointManager?.GetCheckpoint(_currentCheckpointIndex);
-        //if (nextCheckpoint != null)
-        //{
-        //    Vector3 direction = nextCheckpoint.position - transform.position;
-        //    if (Physics.Raycast(transform.position + Vector3.up * 0.5f, direction.normalized, out RaycastHit hit, 10f))
-        //    {
-        //        if (hit.collider.CompareTag("Checkpoint"))
-        //        {
-        //            AddReward(0.05f);
-        //        }
-        //    }
-        //}
-
-        //if (_checkpointManager != null)
-        //{
-        //    Transform checkpoint = _checkpointManager.GetCheckpoint(_currentCheckpointIndex);
-        //    if (checkpoint != null)
-        //    {
-        //        float distance = Vector3.Distance(transform.position, checkpoint.position);
-        //        if (_prevCheckpointDistance > distance)
-        //        {
-        //            AddReward(0.001f); // ��������� �� �����������
-        //        }
-        //        _prevCheckpointDistance = distance;
-        //    }
-        //}
-
-
 
         //Updating reward
         CumulativeRewared = GetCumulativeReward();
@@ -246,8 +220,6 @@ public class MoveToGoalAgent : Agent
 
     public void MoveAgent(ActionBuffers actions)
     {
-        //ActionSegment<int> act
-
 
         var moveAction = actions.DiscreteActions[0];
         var rotateAction = actions.DiscreteActions[1];
@@ -258,7 +230,7 @@ public class MoveToGoalAgent : Agent
             Vector3 moveDir = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
             _rb.MovePosition(_rb.position + moveDir * _moveSpeed * Time.fixedDeltaTime);
         }
-        // �������� else! Rigidbody ��� ����� ��������� ����� Drag.
+        // �������� else! Rigidbody ��� ����� ��������� ����� Drag.
 
 
         if (rotateAction == 1)
@@ -289,13 +261,6 @@ public class MoveToGoalAgent : Agent
         {
             AddReward(-0.5f);
 
-            //foreach (var generator in _obstacleGenerators)
-            //{
-            //    generator?.RegenerateObstacles();
-            //}
-
-            _segmentRouteBuilder?.RegenerateLevel();
-
             EndEpisode();
         }
 
@@ -304,24 +269,14 @@ public class MoveToGoalAgent : Agent
         {
             if (_checkpointManager != null && _checkpointManager.GetCheckpoint(_currentCheckpointIndex) == other.transform)
             {
-                AddReward(0.5f); // ������� ������ �� ���������� ��������
+                AddReward(0.5f); // ������� ������ �� ���������� ��������
                 _currentCheckpointIndex++;
             }
         }
 
     }
 
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag("Wall"))
-    //    {
-    //        AddReward(-0.03f * Time.fixedDeltaTime);
-    //    }
-    //}
-
-
-
-
+ 
 
     private void GoalReached()
     {
@@ -331,10 +286,7 @@ public class MoveToGoalAgent : Agent
 
         CumulativeRewared = GetCumulativeReward();
 
-        //foreach (var generator in _obstacleGenerators)
-        //{
-        //    generator?.RegenerateObstacles();
-        //}
+        //_segmentRouteBuilder?.RegenerateLevel();
 
         EndEpisode();
     }
@@ -387,19 +339,6 @@ public class MoveToGoalAgent : Agent
         }
     }
 
-
-
-
-    //private void OnCollisionExit(Collision collision)
-    //{
-    //    if (collision.gameObject.CompareTag("Wall"))
-    //    {
-    //        if (_renderer != null)
-    //        {
-    //            _renderer.material.color = Color.cyan;
-    //        }
-    //    }
-    //}
 
 
 }

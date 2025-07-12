@@ -7,6 +7,7 @@ public class SegmentRouteBuilder : MonoBehaviour
     [SerializeField] private int segmentCount = 5;
     [SerializeField] private GameObject goalPrefab;
 
+    public Transform GoalTransform { get; private set; }
 
     private Transform currentEndPoint;
 
@@ -17,7 +18,7 @@ public class SegmentRouteBuilder : MonoBehaviour
         GenerateLevel();
     }
 
-    void GenerateLevel()
+    public void GenerateLevel()
     {
         ClearLevel();
 
@@ -64,6 +65,8 @@ public class SegmentRouteBuilder : MonoBehaviour
         {
             GameObject goal = Instantiate(goalPrefab, currentEndPoint.position, currentEndPoint.rotation);
             spawnedSegments.Add(goal);
+
+            GoalTransform = goal.transform;
         }
     }
 
@@ -74,10 +77,12 @@ public class SegmentRouteBuilder : MonoBehaviour
         {
             if (segment != null)
                 Destroy(segment);
-                //Destroy(goalPrefab);
+            //Destroy(goalPrefab);
         }
 
         spawnedSegments.Clear();
+        
+        GoalTransform = null;
     }
 
     public void RegenerateLevel()
