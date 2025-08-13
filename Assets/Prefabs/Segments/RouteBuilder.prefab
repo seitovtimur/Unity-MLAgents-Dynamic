@@ -48,6 +48,5 @@ MonoBehaviour:
   - {fileID: 5771674023003135392, guid: 3b184bd9de0d04f42bf10733d55e26aa, type: 3}
   - {fileID: 5029018074254071497, guid: 980b99e54da31874eb62fcf2419f123d, type: 3}
   - {fileID: 3362901500536079715, guid: a44a7cb2447534a48ae1c37050dd5549, type: 3}
-  - {fileID: 2911676000633749478, guid: 6bef4f4dd9b7c4b4f865d4828c5028ca, type: 3}
   segmentCount: 5
   goalPrefab: {fileID: 0}

@@ -195,7 +195,9 @@ public class MoveToGoalAgent : Agent
             discreteActionsOut[1] = 0;
 
         // Jump
-        discreteActionsOut[2] = Input.GetKey(KeyCode.Space) ? 1 : 0;
+        //discreteActionsOut[2] = Input.GetKey(KeyCode.Space) ? 1 : 0;
+
+        discreteActionsOut[2] = 0;
 
     }
 
@@ -242,11 +244,11 @@ public class MoveToGoalAgent : Agent
             transform.Rotate(0f, _rotationSpeed * Time.deltaTime, 0f);
         }
 
-        if (jumpAction == 1 && _isGrounded)
-        {
-            _rb.AddForce(Vector3.up * _jumpForce, ForceMode.VelocityChange);
-            _isGrounded = false;
-        }
+        //if (jumpAction == 1 && _isGrounded)
+        //{
+        //    _rb.AddForce(Vector3.up * _jumpForce, ForceMode.VelocityChange);
+        //    _isGrounded = false;
+        //}
     }
 
     private void OnTriggerEnter(Collider other)
