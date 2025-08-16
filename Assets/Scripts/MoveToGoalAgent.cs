@@ -82,11 +82,11 @@ public class MoveToGoalAgent : Agent
         {
             _goal = _segmentRouteBuilder.GoalTransform;
         }
-        else
-        {
-            // Эта ошибка теперь будет означать серьезную проблему в логике
-            Debug.LogError("SegmentRouteBuilder не смог предоставить ссылку на новую цель!");
-        }
+        // else
+        // {
+        //     // Эта ошибка теперь будет означать серьезную проблему в логике
+        //     Debug.Log("SegmentRouteBuilder не смог предоставить ссылку на новую цель!");
+        // }
 
         if (_groundRenderer != null && CumulativeRewared != 0f)
         {
@@ -195,8 +195,8 @@ public class MoveToGoalAgent : Agent
             discreteActionsOut[1] = 0;
 
         // Jump
-        discreteActionsOut[2] = Input.GetKey(KeyCode.Space) ? 1 : 0;
-
+        //discreteActionsOut[2] = Input.GetKey(KeyCode.Space) ? 1 : 0;
+        discreteActionsOut[2] = 0; // Jump action is not used in this version
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -223,7 +223,7 @@ public class MoveToGoalAgent : Agent
 
         var moveAction = actions.DiscreteActions[0];
         var rotateAction = actions.DiscreteActions[1];
-        var jumpAction = actions.DiscreteActions[2];
+        //var jumpAction = actions.DiscreteActions[2];
 
         if (moveAction == 1)
         {
@@ -242,11 +242,13 @@ public class MoveToGoalAgent : Agent
             transform.Rotate(0f, _rotationSpeed * Time.deltaTime, 0f);
         }
 
-        if (jumpAction == 1 && _isGrounded)
-        {
-            _rb.AddForce(Vector3.up * _jumpForce, ForceMode.VelocityChange);
-            _isGrounded = false;
-        }
+
+        //jump
+        // if (jumpAction == 1 && _isGrounded)
+        // {
+        //     _rb.AddForce(Vector3.up * _jumpForce, ForceMode.VelocityChange);
+        //     _isGrounded = false;
+        // }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -255,6 +257,15 @@ public class MoveToGoalAgent : Agent
         {
             GoalReached();
         }
+
+        void OnTriggerStay(Collider other)
+        {
+            if (other.CompareTag("Goal"))
+            {
+                GoalReached();
+            }
+        }
+
 
 
         if (other.gameObject.CompareTag("FallZone"))
@@ -280,9 +291,9 @@ public class MoveToGoalAgent : Agent
 
     private void GoalReached()
     {
-        AddReward(1.0f); 
+        AddReward(2.0f); 
         //AddReward(MaxStep / (StepCount * 100.0f));
-        AddReward(1f - StepCount / MaxStep);
+        AddReward(2f - StepCount / MaxStep);
 
         CumulativeRewared = GetCumulativeReward();
 

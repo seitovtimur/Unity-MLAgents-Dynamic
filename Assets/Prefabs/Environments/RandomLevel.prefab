@@ -177,6 +177,18 @@ PrefabInstance:
       value: FallZone
       objectReference: {fileID: 0}
     - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 15.607006
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 8.395765
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 20.463474
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -284,6 +296,10 @@ PrefabInstance:
       objectReference: {fileID: 8818765665833586056, guid: de7f6ca61e3e76e4689c1e9f7786afff, type: 3}
     - target: {fileID: 8227126540810547716, guid: bb9d451ea2daf624f82859c006525cc2, type: 3}
       propertyPath: segmentCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8227126540810547716, guid: bb9d451ea2daf624f82859c006525cc2, type: 3}
+      propertyPath: segmentPrefabs.Array.size
       value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
