@@ -50,6 +50,7 @@ public class MoveToGoalAgent : Agent
         CumulativeRewared = 0f;
 
         _rb = GetComponent<Rigidbody>();
+        _rb.freezeRotation = true;
         _startPos = transform.position;
 
         
@@ -116,6 +117,16 @@ public class MoveToGoalAgent : Agent
         CumulativeRewared = 0f;
         _renderer.material.color = Color.cyan;
     }
+
+    private void FixedUpdate()
+    {
+        // Отключаем любое вращение, которое навешивает физика
+        _rb.angularVelocity = Vector3.zero;
+
+        // Блокируем наклон (чтобы агент всегда оставался стоять на ногах)
+        var rot = transform.rotation.eulerAngles;
+        transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
+    }   
 
     private IEnumerator FlashGround(Color targetColor, float duration)
     {
@@ -330,7 +341,7 @@ public class MoveToGoalAgent : Agent
 
         if (collision.gameObject.CompareTag("Wall"))
         {
-            AddReward(-0.25f);
+            AddReward(-0.1f);
 
             //EndEpisode();
         }
