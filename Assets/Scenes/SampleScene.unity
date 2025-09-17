@@ -1321,7 +1321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1375581600019582934, guid: 49d72d026bf281846bbc7bd1b5096394, type: 3}
       propertyPath: segmentPrefabs.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1375581600019582934, guid: 49d72d026bf281846bbc7bd1b5096394, type: 3}
       propertyPath: 'segmentPrefabs.Array.data[0]'
@@ -1343,6 +1343,10 @@ PrefabInstance:
       propertyPath: 'segmentPrefabs.Array.data[4]'
       value: 
       objectReference: {fileID: 5771674023003135392, guid: 0f9aed32f1690b841999f40ce2a8edfe, type: 3}
+    - target: {fileID: 1375581600019582934, guid: 49d72d026bf281846bbc7bd1b5096394, type: 3}
+      propertyPath: 'segmentPrefabs.Array.data[5]'
+      value: 
+      objectReference: {fileID: 5029018074254071497, guid: d6817a1c25a67cc4d951efec7c648f53, type: 3}
     - target: {fileID: 3450462050733123005, guid: 49d72d026bf281846bbc7bd1b5096394, type: 3}
       propertyPath: Record
       value: 0
@@ -1390,6 +1394,18 @@ PrefabInstance:
     - target: {fileID: 6904474329867070405, guid: 49d72d026bf281846bbc7bd1b5096394, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8647522799143425426, guid: 49d72d026bf281846bbc7bd1b5096394, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 25.01491
+      objectReference: {fileID: 0}
+    - target: {fileID: 8647522799143425426, guid: 49d72d026bf281846bbc7bd1b5096394, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 25.804441
+      objectReference: {fileID: 0}
+    - target: {fileID: 8647522799143425426, guid: 49d72d026bf281846bbc7bd1b5096394, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.00000095367
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

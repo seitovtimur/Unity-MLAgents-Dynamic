@@ -177,18 +177,6 @@ PrefabInstance:
       value: FallZone
       objectReference: {fileID: 0}
     - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 15.607006
-      objectReference: {fileID: 0}
-    - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 8.395765
-      objectReference: {fileID: 0}
-    - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 20.463474
-      objectReference: {fileID: 0}
-    - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -198,7 +186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -4.32e-12
       objectReference: {fileID: 0}
     - target: {fileID: 4797601385987652059, guid: 2e967753509a08147a244cb3fc730095, type: 3}
       propertyPath: m_LocalRotation.w

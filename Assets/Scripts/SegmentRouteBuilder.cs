@@ -7,13 +7,14 @@ public class SegmentRouteBuilder : MonoBehaviour
     [SerializeField] private int segmentCount = 5;
     [SerializeField] private GameObject goalPrefab;
 
-    public Transform GoalTransform { get; private set; }
+    [Header("Branching Settings")]
+    [SerializeField] private bool bothPathsToGoal = false; // ✅ чекбокс в инспекторе
 
-    private Transform currentEndPoint;
+    public Transform GoalTransform { get; private set; }
 
     private List<GameObject> spawnedSegments = new List<GameObject>();
 
-    void Start()
+    public void Start()
     {
         GenerateLevel();
     }
@@ -23,65 +24,87 @@ public class SegmentRouteBuilder : MonoBehaviour
         ClearLevel();
 
         // Начинаем со стартовой позиции
-        currentEndPoint = this.transform;
+        List<Transform> openEndPoints = new List<Transform>();
+        openEndPoints.Add(this.transform);
 
         for (int i = 0; i < segmentCount; i++)
         {
-            GameObject prefab = segmentPrefabs[Random.Range(0, segmentPrefabs.Count)];
+            List<Transform> newEndPoints = new List<Transform>();
 
-            // Инстанс сегмента
-            GameObject segment = Instantiate(prefab);
-
-            // Поиск точек соединения
-            Transform start = segment.transform.Find("StartPoint");
-            Transform end = segment.transform.Find("EndPoint");
-
-            if (start == null || end == null)
+            foreach (Transform currentEndPoint in openEndPoints)
             {
-                Debug.LogError($"Segment missing StartPoint or EndPoint: {segment.name}");
-                return;
+                GameObject prefab = segmentPrefabs[Random.Range(0, segmentPrefabs.Count)];
+                GameObject segment = Instantiate(prefab);
+
+                // Поиск Start и EndPoints
+                Transform start = segment.transform.Find("StartPoint");
+                Transform[] children = segment.GetComponentsInChildren<Transform>();
+
+                if (start == null)
+                {
+                    Debug.LogError($"Segment {segment.name} missing StartPoint!");
+                    continue;
+                }
+
+                // Совмещение StartPoint с текущим EndPoint
+                segment.transform.position = Vector3.zero;
+                segment.transform.rotation = Quaternion.identity;
+
+                segment.transform.rotation = Quaternion.LookRotation(currentEndPoint.forward, currentEndPoint.up);
+                segment.transform.position = currentEndPoint.position - (start.position - segment.transform.position);
+
+                // Собираем все EndPoint
+                foreach (Transform child in children)
+                {
+                    if (child.name.StartsWith("EndPoint"))
+                    {
+                        newEndPoints.Add(child);
+                    }
+                }
+
+                spawnedSegments.Add(segment);
             }
 
-            // 1. Обнуляем позицию и поворот сегмента
-            segment.transform.position = Vector3.zero;
-            segment.transform.rotation = Quaternion.identity;
-
-            // 2. Считаем смещение от центра сегмента до StartPoint (в мировых координатах)
-            Vector3 offset = start.position - segment.transform.position;
-
-            // 3. Вращение сегмента, чтобы его StartPoint.forward совпал с текущим EndPoint.forward (и up)
-            segment.transform.rotation = Quaternion.LookRotation(currentEndPoint.forward, currentEndPoint.up);
-
-            // 4. Сдвигаем сегмент так, чтобы StartPoint совпал с текущей точкой
-            segment.transform.position = currentEndPoint.position - (start.position - segment.transform.position);
-
-            // 5. Обновляем текущий EndPoint
-            currentEndPoint = segment.transform.Find("EndPoint");
-
-            spawnedSegments.Add(segment);
+            openEndPoints = newEndPoints;
         }
 
-        if (goalPrefab != null && currentEndPoint != null)
+        // --- Спавн Goal ---
+        if (goalPrefab != null && openEndPoints.Count > 0)
         {
-            GameObject goal = Instantiate(goalPrefab, currentEndPoint.position, currentEndPoint.rotation);
-            spawnedSegments.Add(goal);
+            if (bothPathsToGoal)
+            {
+                // Все пути ведут к цели
+                foreach (Transform point in openEndPoints)
+                {
+                    GameObject goal = Instantiate(goalPrefab, point.position, point.rotation);
+                    spawnedSegments.Add(goal);
 
-            GoalTransform = goal.transform;
+                    // Первый goal будет основным для агента
+                    if (GoalTransform == null)
+                        GoalTransform = goal.transform;
+                }
+            }
+            else
+            {
+                // Только один путь правильный
+                Transform goalPoint = openEndPoints[Random.Range(0, openEndPoints.Count)];
+                GameObject goal = Instantiate(goalPrefab, goalPoint.position, goalPoint.rotation);
+                spawnedSegments.Add(goal);
+
+                GoalTransform = goal.transform;
+            }
         }
     }
 
-
     public void ClearLevel()
     {
-        foreach (GameObject segment in spawnedSegments)
+        foreach (GameObject obj in spawnedSegments)
         {
-            if (segment != null)
-                Destroy(segment);
-            //Destroy(goalPrefab);
+            if (obj != null)
+                Destroy(obj);
         }
 
         spawnedSegments.Clear();
-        
         GoalTransform = null;
     }
 
