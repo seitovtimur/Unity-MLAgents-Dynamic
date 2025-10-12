@@ -164,13 +164,12 @@ MonoBehaviour:
   MaxStep: 10000
   _goal: {fileID: 0}
   _groundRenderer: {fileID: 0}
-  _moveSpeed: 10
-  _rotationSpeed: 300
-  _jumpForce: 25
   _checkpointManager: {fileID: 0}
   _segmentRouteBuilder: {fileID: 0}
+  _moveSpeed: 10
+  _rotationSpeed: 300
   CurrentEpisode: 0
-  CumulativeRewared: 0
+  CumulativeReward: 0
 --- !u!114 &1695383805677696110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,8 +232,8 @@ MonoBehaviour:
   m_DetectableTags:
   - Ground
   - Obstacle
-  - Wall
   - Goal
+  - RotatingObstacle
   m_RaysPerDirection: 3
   m_MaxRayDegrees: 34
   m_SphereCastRadius: 0.43
@@ -248,7 +247,7 @@ MonoBehaviour:
   rayHitColor: {r: 0, g: 1, b: 0.8046403, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
-  m_EndVerticalOffset: -1.1
+  m_EndVerticalOffset: 0
 --- !u!114 &3915046348638188713
 MonoBehaviour:
   m_ObjectHideFlags: 0

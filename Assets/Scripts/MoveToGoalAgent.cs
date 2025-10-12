@@ -1,44 +1,65 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.IO;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System.Globalization;
 
 
 public class MoveToGoalAgent : Agent
 {
+    [Header("References")]
     [SerializeField] private Transform _goal;
     [SerializeField] private Renderer _groundRenderer;
-    [SerializeField] private float _moveSpeed = 5f;
-    [SerializeField] private float _rotationSpeed = 180f;
-    [SerializeField] private float _jumpForce = 5f;
-    
     [SerializeField] private CheckpointsManager _checkpointManager;
     [SerializeField] private SegmentRouteBuilder _segmentRouteBuilder;
 
+    [Header("Movement")]
+    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private float _rotationSpeed = 180f;
+    //[SerializeField] private float _jumpForce = 5f; // jump disabled in current experiments
 
     private Rigidbody _rb;
     private Vector3 _startPos;
     private bool _isGrounded = true;
     private Renderer _renderer;
 
-
-    //CHECKPOINTS
-    
+    // Checkpoints
     private int _currentCheckpointIndex = 0;
     private float _prevCheckpointDistance = float.MaxValue;
 
-
-
+    // Episode & metrics
     [HideInInspector] public int CurrentEpisode = 0;
-    [HideInInspector] public float CumulativeRewared = 0f;
+    [HideInInspector] public float CumulativeReward = 0f;
 
     private Color _defaultGroundColor;
     private Coroutine _flashGroundCoroutine;
+
+    // Path / distance tracking
+    private float episodeDistance = 0f;
+    private Vector3 lastPos;
+
+    // File / metrics handling
+    private static HashSet<string> initializedRuns = new HashSet<string>();
+    private static object fileLock = new object();
+    private string runIdForFile = null;
+    //private string metricsPath = null;
+    private static string metricsPath = $"Results/metrics_run_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+    private readonly CultureInfo _ci = CultureInfo.InvariantCulture;
+
+
+
+
+    // Per-episode tracking
+    private bool episodeSuccess = false;
+    private float episodeReward = 0f;
+    private int episodeStepCount = 0;
+    private float pathDistance = 0f;
+    private Vector3 startPos;
 
     public override void Initialize()
     {
@@ -47,93 +68,155 @@ public class MoveToGoalAgent : Agent
         _renderer = GetComponent<Renderer>();
 
         CurrentEpisode = 0;
-        CumulativeRewared = 0f;
+        CumulativeReward = 0f;
 
         _rb = GetComponent<Rigidbody>();
-        _rb.freezeRotation = true;
-        _startPos = transform.position;
+        if (_rb != null)
+        {
+            // важно: отключаем вращение физикой (чтобы препятствия не крутят тело агента)
+            _rb.freezeRotation = true;
+        }
 
-        
+        _startPos = transform.position;
+        startPos = _startPos;
+
         _currentCheckpointIndex = 0;
         _prevCheckpointDistance = float.MaxValue;
-        
 
         if (_groundRenderer != null)
         {
             _defaultGroundColor = _groundRenderer.material.color;
         }
-    }
 
+        // Определяем run-id (попытка получить из Academy). Если нет — fallback на timestamp.
+        string detectedRunId = null;
+        try
+        {
+            // Попытка получить свойство RunId через рефлексию (чтобы быть совместимым с разными версиями)
+            var academyType = typeof(Academy);
+            var prop = academyType.GetProperty("RunId");
+            if (prop != null)
+            {
+                var val = prop.GetValue(Academy.Instance, null);
+                detectedRunId = val as string;
+            }
+        }
+        catch
+        {
+            // ignore
+        }
+
+        if (string.IsNullOrEmpty(detectedRunId))
+        {
+            // fallback
+            detectedRunId = $"run_{DateTime.Now:yyyyMMdd_HHmmss}";
+        }
+
+        runIdForFile = detectedRunId;
+
+        // Путь к Result-папке в корне проекта (папка рядом с Assets)
+        string projectRoot = Path.GetDirectoryName(Application.dataPath);
+        string resultsDir = Path.Combine(projectRoot, "Results");
+        if (!Directory.Exists(resultsDir))
+        {
+            Directory.CreateDirectory(resultsDir);
+        }
+
+        metricsPath = Path.Combine(resultsDir, $"metrics_{runIdForFile}.csv");
+        
+
+        // Инициализируем файл (шапка) только один раз на run-id
+        lock (fileLock)
+        {
+            if (!initializedRuns.Contains(runIdForFile))
+            {
+                bool writeHeader = true;
+                // Если файл уже есть — не перезаписываем шапку
+                if (File.Exists(metricsPath))
+                {
+                    // Проверим не пуст ли файл
+                    var fi = new FileInfo(metricsPath);
+                    if (fi.Length > 0) writeHeader = false;
+                }
+
+                if (writeHeader)
+                {
+                    try
+                    {
+                        File.WriteAllText(metricsPath, "Episode,Success,Steps,Reward,PathDistance\n");
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Failed to create metrics file '{metricsPath}': {e}");
+                    }
+                }
+
+                initializedRuns.Add(runIdForFile);
+            }
+        }
+    }
 
     public override void OnEpisodeBegin()
     {
         Debug.Log("OnEpisodeBegin()");
 
-        //ГЕНЕРАЦИЯ УРОВНЯ
-        // if (_segmentRouteBuilder == null)
-        // {
-        //     Debug.LogError("SegmentRouteBuilder is not assigned. Please assign it in the inspector.");
-        //     return;
-        // }
-
+        // Если у нас есть билд-скрипт уровня, можно регенерировать его здесь (по желанию).
         // _segmentRouteBuilder?.RegenerateLevel();
-        
 
+        // Если SegmentRouteBuilder создал цель — используем её
         if (_segmentRouteBuilder != null && _segmentRouteBuilder.GoalTransform != null)
         {
             _goal = _segmentRouteBuilder.GoalTransform;
         }
-        // else
-        // {
-        //     // Эта ошибка теперь будет означать серьезную проблему в логике
-        //     Debug.Log("SegmentRouteBuilder не смог предоставить ссылку на новую цель!");
-        // }
 
-        if (_groundRenderer != null && CumulativeRewared != 0f)
+        if (_groundRenderer != null && CumulativeReward != 0f)
         {
-            Color flashColor = (CumulativeRewared >= 0f) ? Color.green : Color.red;
-
+            Color flashColor = (CumulativeReward >= 0f) ? Color.green : Color.red;
             if (_flashGroundCoroutine != null)
             {
                 StopCoroutine(_flashGroundCoroutine);
             }
-
             _flashGroundCoroutine = StartCoroutine(FlashGround(flashColor, 1.5f));
         }
 
         _currentCheckpointIndex = 0;
 
-
-        _rb.linearVelocity = Vector3.zero;
-        _rb.angularVelocity = Vector3.zero;
+        if (_rb != null)
+        {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+        }
 
         transform.position = _startPos;
         transform.rotation = Quaternion.identity;
 
         _isGrounded = true;
 
-
         CurrentEpisode++;
-        CumulativeRewared = 0f;
-        _renderer.material.color = Color.cyan;
+        CumulativeReward = 0f;
+        if (_renderer != null) _renderer.material.color = Color.cyan;
+
+        // Reset per-episode metrics
+        episodeSuccess = false;
+        episodeReward = 0f;
+        episodeStepCount = 0;
+        pathDistance = 0f;
+        episodeDistance = 0f;
+        lastPos = transform.position;
+        startPos = transform.position;
+
+        // Reset all checkpoint instances in scene (если такие есть)
+        var cps = FindObjectsOfType<Checkpoint>();
+        foreach (var cp in cps)
+        {
+            cp.ResetCheckpoint();
+        }
     }
-
-    private void FixedUpdate()
-    {
-        // Отключаем любое вращение, которое навешивает физика
-        _rb.angularVelocity = Vector3.zero;
-
-        // Блокируем наклон (чтобы агент всегда оставался стоять на ногах)
-        var rot = transform.rotation.eulerAngles;
-        transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
-    }   
 
     private IEnumerator FlashGround(Color targetColor, float duration)
     {
         float elapsedTime = 0f;
-
         _groundRenderer.material.color = targetColor;
-
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
@@ -144,11 +227,9 @@ public class MoveToGoalAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-
         if (_goal == null)
         {
-            // Если цели по какой-то причине нет, мы не можем собрать наблюдения.
-            // Отправляем 8 нулевых значений, чтобы вектор наблюдений имел правильный размер.
+            // если цели нет, добавляем нули, чтобы размер наблюдений был стабильным
             sensor.AddObservation(0f); // goalX
             sensor.AddObservation(0f); // goalZ
             sensor.AddObservation(0f); // agentX
@@ -157,10 +238,10 @@ public class MoveToGoalAgent : Agent
             sensor.AddObservation(0f); // velocityX
             sensor.AddObservation(0f); // velocityZ
             sensor.AddObservation(0f); // isGrounded
-            return; // Выходим из метода, чтобы избежать ошибки
+            return;
         }
-        
 
+        // Нормализация позиций относительно масштаба сцены (подстрой под свои нужды)
         float goalPositionX_normalized = _goal.localPosition.x / 5f;
         float goalPositionZ_normalized = _goal.localPosition.z / 5f;
 
@@ -169,11 +250,8 @@ public class MoveToGoalAgent : Agent
 
         float agentRotation_normalized = (transform.localRotation.eulerAngles.y / 360f) * 2f - 1f;
 
-        float agentVelocityX_normalized = _rb.linearVelocity.x / 5f;
-        float agentVelocityY_normalized = _rb.linearVelocity.z / 5f;
-
-
-        
+        float agentVelocityX_normalized = _rb != null ? _rb.linearVelocity.x / 5f : 0f;
+        float agentVelocityY_normalized = _rb != null ? _rb.linearVelocity.z / 5f : 0f;
 
         sensor.AddObservation(goalPositionX_normalized);
         sensor.AddObservation(goalPositionZ_normalized);
@@ -185,9 +263,6 @@ public class MoveToGoalAgent : Agent
         sensor.AddObservation(agentVelocityY_normalized);
 
         sensor.AddObservation(_isGrounded ? 1f : 0f);
-
-        //sensor.AddObservation(_goal.localPosition);
-
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -205,44 +280,49 @@ public class MoveToGoalAgent : Agent
         else
             discreteActionsOut[1] = 0;
 
-        // Jump
-        //discreteActionsOut[2] = Input.GetKey(KeyCode.Space) ? 1 : 0;
-        discreteActionsOut[2] = 0; // Jump action is not used in this version
+        // Jump disabled: always 0 (we removed jump from actions)
+        discreteActionsOut[2] = 0;
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        //Move the agent using the action
+        // движение агента
         MoveAgent(actions);
 
-        //Penalty given each step to encourage agent to finish quickly
-        AddReward(-2f / MaxStep);
+        // step penalty to encourage faster completion
+        //AddReward(-2f / MaxStep);
 
-        //if (_rb.linearVelocity.magnitude < 0.1f)
-        //{
-        //    AddReward(-0.01f);
-        //}
+        //AddReward(-0.01f);
 
-        //Updating reward
-        CumulativeRewared = GetCumulativeReward();
+        float dynamicPenalty = Mathf.Lerp(-0.001f, -0.01f, (float)StepCount / MaxStep);
+        AddReward(dynamicPenalty);
+
+        // update cumulative reward for display/debug
+        CumulativeReward = GetCumulativeReward();
+
+        // track per-episode values
+        episodeReward = GetCumulativeReward();
+        episodeStepCount = StepCount;
     }
-
-
 
     public void MoveAgent(ActionBuffers actions)
     {
-
         var moveAction = actions.DiscreteActions[0];
         var rotateAction = actions.DiscreteActions[1];
-        //var jumpAction = actions.DiscreteActions[2];
+        //var jumpAction = actions.DiscreteActions[2]; // disabled
 
         if (moveAction == 1)
         {
             Vector3 moveDir = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
-            _rb.MovePosition(_rb.position + moveDir * _moveSpeed * Time.fixedDeltaTime);
+            if (_rb != null)
+            {
+                _rb.MovePosition(_rb.position + moveDir * _moveSpeed * Time.fixedDeltaTime);
+            }
+            else
+            {
+                transform.position += moveDir * _moveSpeed * Time.fixedDeltaTime;
+            }
         }
-        // �������� else! Rigidbody ��� ����� ��������� ����� Drag.
-
 
         if (rotateAction == 1)
         {
@@ -253,13 +333,25 @@ public class MoveToGoalAgent : Agent
             transform.Rotate(0f, _rotationSpeed * Time.deltaTime, 0f);
         }
 
+        // jump removed / commented out
+        // if (jumpAction == 1 && _isGrounded) { ... }
+    }
 
-        //jump
-        // if (jumpAction == 1 && _isGrounded)
-        // {
-        //     _rb.AddForce(Vector3.up * _jumpForce, ForceMode.VelocityChange);
-        //     _isGrounded = false;
-        // }
+    private void FixedUpdate()
+    {
+        // prevent physics from rotating agent (so obstacles won't "spin" agent)
+        if (_rb != null)
+        {
+            _rb.angularVelocity = Vector3.zero;
+        }
+
+        // lock tilt (x and z rotation) so agent doesn't tip over
+        var rot = transform.rotation.eulerAngles;
+        transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
+
+        // track travelled distance
+        episodeDistance += Vector3.Distance(transform.position, lastPos);
+        lastPos = transform.position;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -269,52 +361,115 @@ public class MoveToGoalAgent : Agent
             GoalReached();
         }
 
-        void OnTriggerStay(Collider other)
-        {
-            if (other.CompareTag("Goal"))
-            {
-                GoalReached();
-            }
-        }
-
-
-
         if (other.gameObject.CompareTag("FallZone"))
         {
             AddReward(-0.5f);
-
-            EndEpisode();
+            FailEpisode();
         }
-
 
         if (other.CompareTag("Checkpoint"))
         {
-            if (_checkpointManager != null && _checkpointManager.GetCheckpoint(_currentCheckpointIndex) == other.transform)
+            // Assumes each checkpoint has a Checkpoint component with TryActivate() that returns true once per episode
+            var checkpoint = other.GetComponent<Checkpoint>();
+            if (checkpoint != null && checkpoint.TryActivate())
             {
-                AddReward(0.5f); // ������� ������ �� ���������� ��������
-                _currentCheckpointIndex++;
+                AddReward(0.5f);
+                Debug.Log($"Checkpoint reached: {other.name}");
             }
         }
-
     }
 
- 
+    // private void GoalReached()
+    // {
+    //     AddReward(2.0f);
+    //     AddReward(2f - (float)StepCount / MaxStep);
+
+    //     CumulativeReward = GetCumulativeReward();
+
+    //     episodeSuccess = true;
+    //     episodeReward = GetCumulativeReward();
+    //     episodeStepCount = StepCount;
+    //     pathDistance = episodeDistance;
+
+    //     // regenerate level if builder is present
+    //     if (_segmentRouteBuilder != null)
+    //     {
+    //         _segmentRouteBuilder?.RegenerateLevel();
+    //     }
+
+    //     EndEpisodeWithStats(true);
+    // }
+
 
     private void GoalReached()
     {
-        AddReward(2.0f); 
-        //AddReward(MaxStep / (StepCount * 100.0f));
-        AddReward(2f - StepCount / MaxStep);
+        // float baseReward = 2.0f;
+        // float speedBonus = 2f * (1f - (float)StepCount / MaxStep); // от 0 до 2
 
-        CumulativeRewared = GetCumulativeReward();
 
-        if (_segmentRouteBuilder == null)
+        float t = (float)StepCount / MaxStep;
+        float speedBonus = 2f * (1f - Mathf.Pow(t, 2)); // квадратичное усиление для быстрых
+
+
+        AddReward(baseReward);
+        AddReward(speedBonus);
+
+        CumulativeReward = GetCumulativeReward();
+
+        episodeSuccess = true;
+        episodeReward = GetCumulativeReward();
+        episodeStepCount = StepCount;
+        pathDistance = episodeDistance;
+
+        if (_segmentRouteBuilder != null)
+            _segmentRouteBuilder.RegenerateLevel();
+
+        EndEpisodeWithStats(true);
+    }
+
+
+    private void FailEpisode()
+    {
+        AddReward(-0.5f);
+        episodeSuccess = false;
+        episodeReward = GetCumulativeReward();
+        episodeStepCount = StepCount;
+        pathDistance = episodeDistance;
+
+        EndEpisodeWithStats(false);
+    }
+
+    private void EndEpisodeWithStats(bool success)
+    {
+        // Write CSV line
+        string line = $"{CurrentEpisode},{(success ? 1 : 0)},{episodeStepCount},{episodeReward:F3},{pathDistance:F3}\n";
+        try
         {
-            Debug.LogError("SegmentRouteBuilder is not assigned. Please assign it in the inspector.");
-            return;
+            lock (fileLock)
+            {
+                // File.AppendAllText(metricsPath, line);
+                File.AppendAllText(metricsPath, $"{CompletedEpisodes.ToString(_ci)},{(success ? 1 : 0)},{StepCount.ToString(_ci)},{CumulativeReward.ToString(_ci)},{episodeDistance.ToString(_ci)}\n");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to write metrics to '{metricsPath}': {e}");
         }
 
-        _segmentRouteBuilder?.RegenerateLevel();
+        // Log to TensorBoard via StatsRecorder
+        try
+        {
+            var stats = Academy.Instance.StatsRecorder;
+            stats.Add("episode/success", success ? 1f : 0f);
+            stats.Add("episode/length", episodeStepCount);
+            stats.Add("episode/distance", pathDistance);
+            stats.Add("episode/reward", episodeReward);
+        }
+        catch (Exception e)
+        {
+            // don't break training if StatsRecorder not available
+            Debug.LogWarning($"Failed to write stats to StatsRecorder: {e.Message}");
+        }
 
         EndEpisode();
     }
@@ -327,26 +482,22 @@ public class MoveToGoalAgent : Agent
 
     private void OnCollisionEnter(Collision collision)
     {
-        
         if (collision.gameObject.CompareTag("Ground"))
         {
             _isGrounded = true;
         }
 
-        //if (collision.gameObject.CompareTag("Checkpoint"))
-        //{
-        //    AddReward(0.5f);
-        //    _isGrounded = true;
-        //}
-
         if (collision.gameObject.CompareTag("Wall"))
         {
             AddReward(-0.1f);
-
-            //EndEpisode();
         }
 
         if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            AddReward(-0.1f);
+        }
+
+        if (collision.gameObject.CompareTag("RotatingObstacle"))
         {
             AddReward(-0.1f);
         }
@@ -356,17 +507,17 @@ public class MoveToGoalAgent : Agent
     {
         if (collision.gameObject.CompareTag("Obstacle"))
         {
-            AddReward(-0.03f * Time.fixedDeltaTime);
+            AddReward(-0.1f * Time.fixedDeltaTime);
+        }
+
+        if (collision.gameObject.CompareTag("RotatingObstacle"))
+        {
+            AddReward(-0.1f * Time.fixedDeltaTime);
         }
 
         if (collision.gameObject.CompareTag("Wall"))
         {
             AddReward(-0.03f * Time.fixedDeltaTime);
-
-            //EndEpisode();
         }
     }
-
-
-
 }

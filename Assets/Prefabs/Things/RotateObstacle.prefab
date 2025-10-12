@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6797267261999020868}
   m_Layer: 0
   m_Name: RotateObstacle
-  m_TagString: Obstacle
+  m_TagString: RotatingObstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 1206765651149055918}
   m_Layer: 0
   m_Name: cube
-  m_TagString: Untagged
+  m_TagString: RotatingObstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b86e8aa1761a449965a76d357e0dcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minRotationSpeed: {x: 0, y: -150, z: 0}
+  minRotationSpeed: {x: 0, y: 60, z: 0}
   maxRotationSpeed: {x: 0, y: 150, z: 0}
 --- !u!54 &1206765651149055918
 Rigidbody:

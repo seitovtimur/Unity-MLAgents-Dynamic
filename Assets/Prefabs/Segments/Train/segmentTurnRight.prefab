@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8562405976148630747}
   - component: {fileID: 167943086324493921}
   - component: {fileID: 745171818045315015}
+  - component: {fileID: 960925637103142660}
   m_Layer: 0
   m_Name: Start
   m_TagString: Checkpoint
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 824578876760515548}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -10.1, y: 1.89, z: -6.9}
   m_LocalScale: {x: 11.133219, y: 3.2162, z: 2.372473}
   m_ConstrainProportionsScale: 0
@@ -108,6 +109,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &960925637103142660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824578876760515548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bc4ccf100b01346b95b840d9e37fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2337401325499586006
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,6 +133,7 @@ GameObject:
   - component: {fileID: 5327310790012273854}
   - component: {fileID: 4441675753727902599}
   - component: {fileID: 2231980098628033799}
+  - component: {fileID: 1713462332668716146}
   m_Layer: 0
   m_Name: End
   m_TagString: Checkpoint
@@ -135,9 +149,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2337401325499586006}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 12.8, y: 2, z: 0.8}
-  m_LocalScale: {x: 11.133219, y: 3.2162, z: 2.372473}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 12.8, y: 1.76, z: 1.14}
+  m_LocalScale: {x: 11.133217, y: 3.2162, z: 2.372473}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6473643607045383034}
@@ -216,6 +230,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1713462332668716146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2337401325499586006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bc4ccf100b01346b95b840d9e37fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2590814090698830215
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,7 +307,6 @@ Transform:
   - {fileID: 6473643607045383034}
   - {fileID: 4707948953022123177}
   - {fileID: 6963343899188598284}
-  - {fileID: 498273381415686356}
   - {fileID: 7062152857666991482}
   - {fileID: 2337569051346480187}
   m_Father: {fileID: 0}
@@ -298,6 +323,7 @@ GameObject:
   - component: {fileID: 4326405542533713796}
   - component: {fileID: 3095064401388714447}
   - component: {fileID: 6199716374686619803}
+  - component: {fileID: 3887664233128051017}
   m_Layer: 0
   m_Name: Turn
   m_TagString: Checkpoint
@@ -313,13 +339,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3959196311744516423}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -3.6, y: 2, z: 1.3}
-  m_LocalScale: {x: 11.133219, y: 3.2162, z: 2.372473}
+  m_LocalRotation: {x: -0, y: 0.5245662, z: -0, w: 0.8513697}
+  m_LocalPosition: {x: -4.28, y: 2, z: 1.28}
+  m_LocalScale: {x: 12.825467, y: 3.2162, z: 2.6752007}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6473643607045383034}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 63.278, z: 0}
 --- !u!33 &4326405542533713796
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -394,6 +420,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3887664233128051017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3959196311744516423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bc4ccf100b01346b95b840d9e37fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5238388334093638109
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,53 +466,6 @@ Transform:
   - {fileID: 2776116265323729712}
   m_Father: {fileID: 6702730092521349817}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5390998233198278173
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 498273381415686356}
-  - component: {fileID: 5993496183242248992}
-  m_Layer: 0
-  m_Name: checkpointsManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &498273381415686356
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5390998233198278173}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6702730092521349817}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5993496183242248992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5390998233198278173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2839153a73457143ba3ac5a30f2422d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpoints:
-  - {fileID: 9199547788677011332}
-  - {fileID: 2776116265323729712}
 --- !u!1 &7046482607823827932
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +539,7 @@ MonoBehaviour:
   - {fileID: 6742215176174678183, guid: 7414427c43c26854f9eddccca2feee7f, type: 3}
   - {fileID: 292021099057222556, guid: 5c5bc1c1f15d3104ebb9477ffb5cd250, type: 3}
   minObstacleCount: 0
-  maxObstacleCount: 2
+  maxObstacleCount: 1
   minObstacleSpacing: 9
   obstacleAreaWidth: 3
   obstacleAreaLength: 3.5
@@ -657,7 +648,7 @@ MonoBehaviour:
   - {fileID: 6742215176174678183, guid: 7414427c43c26854f9eddccca2feee7f, type: 3}
   - {fileID: 292021099057222556, guid: 5c5bc1c1f15d3104ebb9477ffb5cd250, type: 3}
   minObstacleCount: 0
-  maxObstacleCount: 2
+  maxObstacleCount: 1
   minObstacleSpacing: 9
   obstacleAreaWidth: 2.5
   obstacleAreaLength: 3.5

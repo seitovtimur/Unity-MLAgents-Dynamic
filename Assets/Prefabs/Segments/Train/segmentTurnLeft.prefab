@@ -1,52 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &834155904015282628
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2229070483118884313}
-  - component: {fileID: 4772473712435694620}
-  m_Layer: 0
-  m_Name: checkpointsManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2229070483118884313
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 834155904015282628}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 920745139635467184}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4772473712435694620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 834155904015282628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2839153a73457143ba3ac5a30f2422d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpoints:
-  - {fileID: 5400473443644115400}
-  - {fileID: 4538453804959057215}
 --- !u!1 &3757078256159947288
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,7 +73,7 @@ MonoBehaviour:
   - {fileID: 6742215176174678183, guid: 7414427c43c26854f9eddccca2feee7f, type: 3}
   - {fileID: 292021099057222556, guid: 5c5bc1c1f15d3104ebb9477ffb5cd250, type: 3}
   minObstacleCount: 0
-  maxObstacleCount: 2
+  maxObstacleCount: 1
   minObstacleSpacing: 9
   obstacleAreaWidth: 2.5
   obstacleAreaLength: 3.5
@@ -137,6 +90,7 @@ GameObject:
   - component: {fileID: 6683510664622381383}
   - component: {fileID: 3557795442774774576}
   - component: {fileID: 3912734910085166084}
+  - component: {fileID: 3166841523089737206}
   m_Layer: 0
   m_Name: Start
   m_TagString: Checkpoint
@@ -152,7 +106,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4575960720785028338}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.89, z: 1.9}
   m_LocalScale: {x: 11.133219, y: 3.2162, z: 2.372473}
   m_ConstrainProportionsScale: 0
@@ -233,6 +187,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3166841523089737206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4575960720785028338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bc4ccf100b01346b95b840d9e37fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4635786106136859727
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,6 +211,7 @@ GameObject:
   - component: {fileID: 8562708711845818445}
   - component: {fileID: 3184146333754677180}
   - component: {fileID: 3466123525001121453}
+  - component: {fileID: 1035224548181899317}
   m_Layer: 0
   m_Name: End
   m_TagString: Checkpoint
@@ -260,9 +227,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4635786106136859727}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -22.98, y: 2, z: 10}
-  m_LocalScale: {x: 11.133219, y: 3.2162, z: 2.372473}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -22.98, y: 1.72, z: 9.55}
+  m_LocalScale: {x: 11.133217, y: 3.2162, z: 2.372473}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8599944146440169517}
@@ -341,6 +308,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1035224548181899317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4635786106136859727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bc4ccf100b01346b95b840d9e37fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5029018074254071497
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +354,6 @@ Transform:
   - {fileID: 8599944146440169517}
   - {fileID: 1881041962492595258}
   - {fileID: 1929196016448148060}
-  - {fileID: 2229070483118884313}
   - {fileID: 8153096361611272415}
   - {fileID: 2516777981853393127}
   m_Father: {fileID: 0}
@@ -392,6 +370,7 @@ GameObject:
   - component: {fileID: 4574256029056483847}
   - component: {fileID: 7140720223009231602}
   - component: {fileID: 5429490732641884059}
+  - component: {fileID: 7281659542711005865}
   m_Layer: 0
   m_Name: Turn
   m_TagString: Checkpoint
@@ -407,13 +386,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5107516211312651793}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -6.8, y: 1.89, z: 9.58}
-  m_LocalScale: {x: 11.133219, y: 3.2162, z: 2.372473}
+  m_LocalRotation: {x: -0, y: -0.56598216, z: -0, w: 0.82441753}
+  m_LocalPosition: {x: -6.35, y: 1.89, z: 9.41}
+  m_LocalScale: {x: 12.982445, y: 3.2162, z: 2.8578806}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8599944146440169517}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -68.941, z: 0}
 --- !u!33 &4574256029056483847
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -488,6 +467,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7281659542711005865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5107516211312651793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bc4ccf100b01346b95b840d9e37fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5161749272508150838
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,7 +617,7 @@ MonoBehaviour:
   - {fileID: 6742215176174678183, guid: 7414427c43c26854f9eddccca2feee7f, type: 3}
   - {fileID: 292021099057222556, guid: 5c5bc1c1f15d3104ebb9477ffb5cd250, type: 3}
   minObstacleCount: 0
-  maxObstacleCount: 2
+  maxObstacleCount: 1
   minObstacleSpacing: 9
   obstacleAreaWidth: 3
   obstacleAreaLength: 3.5

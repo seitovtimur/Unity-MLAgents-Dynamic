@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7948990884689920800}
   - component: {fileID: 2713718500466416911}
   - component: {fileID: 5035549661242908131}
+  - component: {fileID: 8717942353621966886}
   m_Layer: 0
   m_Name: Middle
   m_TagString: Checkpoint
@@ -50,12 +51,12 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730620890354619305}
   m_Enabled: 0
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
+  m_MotionVectors: 2
+  m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
@@ -108,6 +109,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8717942353621966886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730620890354619305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bc4ccf100b01346b95b840d9e37fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2427803612465430863
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,9 +297,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2839153a73457143ba3ac5a30f2422d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpoints:
-  - {fileID: 3099421205939820906}
-  - {fileID: 4310531340801725516}
 --- !u!1 &7450910280111502298
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +309,7 @@ GameObject:
   - component: {fileID: 4720239181224707983}
   - component: {fileID: 7500080905246741538}
   - component: {fileID: 6009309063515555037}
+  - component: {fileID: 882551291080873278}
   m_Layer: 0
   m_Name: End
   m_TagString: Checkpoint
@@ -337,12 +348,12 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7450910280111502298}
   m_Enabled: 0
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
+  m_MotionVectors: 2
+  m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
@@ -395,6 +406,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &882551291080873278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7450910280111502298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bc4ccf100b01346b95b840d9e37fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7615351580276915705
 GameObject:
   m_ObjectHideFlags: 0

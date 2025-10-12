@@ -122,6 +122,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveDistance: 5
-  speedRange: {x: 2, y: 6}
-  sizeRange: {x: 3, y: 5}
-  height: 3
+  speedRange: {x: 3.5, y: 7}
+  sizeRange: {x: 3.5, y: 5}
+  height: 5

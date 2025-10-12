@@ -26,10 +26,10 @@ public class GUI_Agent : MonoBehaviour
     private void OnGUI()
     {
         string debugEpisode = "Episode: " + _agent.CurrentEpisode + " - Step: " + _agent.StepCount;
-        string debugReward = "Reward: " + _agent.CumulativeRewared.ToString();
+        string debugReward = "Reward: " + _agent.CumulativeReward.ToString();
 
         // Select style based on reward value
-        GUIStyle rewardStyle = _agent.CumulativeRewared < 0 ? _negativeStyle : _positiveStyle;
+        GUIStyle rewardStyle = _agent.CumulativeReward < 0 ? _negativeStyle : _positiveStyle;
 
         // Display the debug text
         GUI.Label(new Rect(20, 20, 500, 50), debugEpisode, _defaultStyle);

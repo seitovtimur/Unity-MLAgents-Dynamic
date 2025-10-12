@@ -27,7 +27,7 @@ public class PhysicsParticleEmitter : MonoBehaviour
         Rigidbody rb = particle.GetComponent<Rigidbody>();
 
         // Толкаем вперёд как у Particle System
-        rb.velocity = transform.forward * particleSpeed;
+        rb.linearVelocity = transform.forward * particleSpeed;
 
         // Уничтожаем после жизни
         Destroy(particle, particleLifetime);

@@ -1,0 +1,47 @@
+{
+    "MoveToGoal": {
+        "checkpoints": [
+            {
+                "steps": 499950,
+                "file_path": "results\\trainPPOTuned01\\MoveToGoal\\MoveToGoal-499950.onnx",
+                "reward": 5.922449788078666,
+                "creation_time": 1759478028.1913877,
+                "auxillary_file_paths": [
+                    "results\\trainPPOTuned01\\MoveToGoal\\MoveToGoal-499950.pt"
+                ]
+            },
+            {
+                "steps": 999919,
+                "file_path": "results\\trainPPOTuned01\\MoveToGoal\\MoveToGoal-999919.onnx",
+                "reward": 7.004241991223711,
+                "creation_time": 1759478352.8656845,
+                "auxillary_file_paths": [
+                    "results\\trainPPOTuned01\\MoveToGoal\\MoveToGoal-999919.pt"
+                ]
+            },
+            {
+                "steps": 1000047,
+                "file_path": "results\\trainPPOTuned01\\MoveToGoal\\MoveToGoal-1000047.onnx",
+                "reward": 7.004241991223711,
+                "creation_time": 1759478352.9590776,
+                "auxillary_file_paths": [
+                    "results\\trainPPOTuned01\\MoveToGoal\\MoveToGoal-1000047.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000047,
+            "file_path": "results\\trainPPOTuned01\\MoveToGoal.onnx",
+            "reward": 7.004241991223711,
+            "creation_time": 1759478352.9590776,
+            "auxillary_file_paths": [
+                "results\\trainPPOTuned01\\MoveToGoal\\MoveToGoal-1000047.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
