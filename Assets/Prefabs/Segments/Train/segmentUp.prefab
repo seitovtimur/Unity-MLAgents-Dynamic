@@ -445,6 +445,7 @@ MonoBehaviour:
   obstaclePrefabs:
   - {fileID: 6742215176174678183, guid: 7414427c43c26854f9eddccca2feee7f, type: 3}
   - {fileID: 292021099057222556, guid: 5c5bc1c1f15d3104ebb9477ffb5cd250, type: 3}
+  - {fileID: 6742215176174678183, guid: d426fcaf9d8763841bd1d8f7c7082294, type: 3}
   minObstacleCount: 0
   maxObstacleCount: 2
   minObstacleSpacing: 15

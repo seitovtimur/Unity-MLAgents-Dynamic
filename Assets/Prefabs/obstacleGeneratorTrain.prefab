@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9200622123656371880
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8743626873407818595}
+  - component: {fileID: 5712513206018607026}
+  - component: {fileID: 7041590139562980985}
+  m_Layer: 0
+  m_Name: obstacleGeneratorTrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8743626873407818595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9200622123656371880}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5712513206018607026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9200622123656371880}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bacb33c8a5adac1408f4ac36175bd425, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obstaclePrefabs:
+  - {fileID: 292021099057222556, guid: 5c5bc1c1f15d3104ebb9477ffb5cd250, type: 3}
+  - {fileID: 6742215176174678183, guid: 7414427c43c26854f9eddccca2feee7f, type: 3}
+  floorPrefab: {fileID: 0}
+  goalPrefab: {fileID: 8818765665833586056, guid: de7f6ca61e3e76e4689c1e9f7786afff, type: 3}
+  fallZonePrefab: {fileID: 3701661611550806071, guid: 2e967753509a08147a244cb3fc730095, type: 3}
+  minObstacleCount: 0
+  maxObstacleCount: 2
+  minObstacleSpacing: 20
+  goalDistance: 40
+  floorSizeRangeX: {x: 1, y: 1.75}
+  floorSizeRangeY: {x: 6, y: 6}
+--- !u!114 &7041590139562980985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9200622123656371880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a83c2ffc6e6eab4aa396d949baf539d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obstaclePrefabs:
+  - {fileID: 6742215176174678183, guid: 7414427c43c26854f9eddccca2feee7f, type: 3}
+  - {fileID: 292021099057222556, guid: 5c5bc1c1f15d3104ebb9477ffb5cd250, type: 3}
+  - {fileID: 6742215176174678183, guid: d426fcaf9d8763841bd1d8f7c7082294, type: 3}
+  minObstacleCount: 0
+  maxObstacleCount: 2
+  minObstacleSpacing: 15
+  obstacleAreaWidth: 4
+  obstacleAreaLength: 10
+  obstacleHeight: 1

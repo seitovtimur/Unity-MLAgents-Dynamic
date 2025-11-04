@@ -1,0 +1,65 @@
+{
+    "MoveToGoal": {
+        "checkpoints": [
+            {
+                "steps": 2999908,
+                "file_path": "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-2999908.onnx",
+                "reward": 6.705363553584175,
+                "creation_time": 1760943023.2753696,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-2999908.pt"
+                ]
+            },
+            {
+                "steps": 3000036,
+                "file_path": "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-3000036.onnx",
+                "reward": 6.705363553584175,
+                "creation_time": 1760943023.355271,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-3000036.pt"
+                ]
+            },
+            {
+                "steps": 3499916,
+                "file_path": "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-3499916.onnx",
+                "reward": 5.884206316505487,
+                "creation_time": 1760943663.097044,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-3499916.pt"
+                ]
+            },
+            {
+                "steps": 3999957,
+                "file_path": "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-3999957.onnx",
+                "reward": 5.764720934132735,
+                "creation_time": 1760944003.8214183,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-3999957.pt"
+                ]
+            },
+            {
+                "steps": 4000028,
+                "file_path": "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-4000028.onnx",
+                "reward": 6.460788598284125,
+                "creation_time": 1760944003.8945348,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-4000028.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 4000028,
+            "file_path": "results\\train_PPO_Default_01\\MoveToGoal.onnx",
+            "reward": 6.460788598284125,
+            "creation_time": 1760944003.8945348,
+            "auxillary_file_paths": [
+                "results\\train_PPO_Default_01\\MoveToGoal\\MoveToGoal-4000028.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

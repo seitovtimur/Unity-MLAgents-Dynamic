@@ -44,9 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2839153a73457143ba3ac5a30f2422d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpoints:
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &1163199047292903436
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,6 +91,10 @@ PrefabInstance:
       propertyPath: _goal
       value: 
       objectReference: {fileID: 6367583853813250720, guid: de7f6ca61e3e76e4689c1e9f7786afff, type: 3}
+    - target: {fileID: 882066368019337160, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
+      propertyPath: MaxStep
+      value: 3000000
+      objectReference: {fileID: 0}
     - target: {fileID: 882066368019337160, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
       propertyPath: _checkpointManager
       value: 
@@ -149,6 +150,14 @@ PrefabInstance:
     - target: {fileID: 3000075426143298164, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3563296661749181642, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
+      propertyPath: m_RayLength
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 3563296661749181642, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
+      propertyPath: m_EndVerticalOffset
+      value: 3.7
       objectReference: {fileID: 0}
     - target: {fileID: 3915046348638188713, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
       propertyPath: Record

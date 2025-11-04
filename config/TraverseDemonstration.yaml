@@ -19,9 +19,9 @@ behaviors:
         gamma: 0.99
         strength: 1.0
     behavioral_cloning:
-      demo_path: Demonstrations/traverseDemo.demo
-      strength: 0.5
-      steps: 200000
+      demo_path: Demonstrations/traverseDemo1.demo
+      strength: 0.35
+      steps: 300000
     keep_checkpoints: 5
     max_steps: 1000000
     time_horizon: 128

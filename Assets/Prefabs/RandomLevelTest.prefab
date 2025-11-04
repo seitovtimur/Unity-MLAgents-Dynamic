@@ -229,6 +229,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6367583853813250720, guid: de7f6ca61e3e76e4689c1e9f7786afff, type: 3}
     - target: {fileID: 882066368019337160, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
+      propertyPath: MaxStep
+      value: 3000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 882066368019337160, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
       propertyPath: _checkpointManager
       value: 
       objectReference: {fileID: 5862070653150495047}
@@ -239,7 +243,7 @@ PrefabInstance:
     - target: {fileID: 1695383805677696110, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: cbf0970db02b8554ca8fa418a5f84454, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 5c3e34d318a8fa845bfdacc84bc5d6dd, type: 3}
     - target: {fileID: 1695383805677696110, guid: 1117b07a649091843a0cb1798347e6f5, type: 3}
       propertyPath: m_BehaviorType
       value: 2

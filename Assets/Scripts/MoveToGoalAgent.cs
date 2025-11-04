@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using System.Globalization;
-
 
 public class MoveToGoalAgent : Agent
 {
@@ -32,6 +29,8 @@ public class MoveToGoalAgent : Agent
     private int _currentCheckpointIndex = 0;
     private float _prevCheckpointDistance = float.MaxValue;
 
+    private float _lastDistanceToGoal = float.MaxValue;
+
     // Episode & metrics
     [HideInInspector] public int CurrentEpisode = 0;
     [HideInInspector] public float CumulativeReward = 0f;
@@ -43,17 +42,6 @@ public class MoveToGoalAgent : Agent
     private float episodeDistance = 0f;
     private Vector3 lastPos;
 
-    // File / metrics handling
-    private static HashSet<string> initializedRuns = new HashSet<string>();
-    private static object fileLock = new object();
-    private string runIdForFile = null;
-    //private string metricsPath = null;
-    private static string metricsPath = $"Results/metrics_run_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-    private readonly CultureInfo _ci = CultureInfo.InvariantCulture;
-
-
-
-
     // Per-episode tracking
     private bool episodeSuccess = false;
     private float episodeReward = 0f;
@@ -63,8 +51,6 @@ public class MoveToGoalAgent : Agent
 
     public override void Initialize()
     {
-        Debug.Log("Initialize()");
-
         _renderer = GetComponent<Renderer>();
 
         CurrentEpisode = 0;
@@ -87,82 +73,10 @@ public class MoveToGoalAgent : Agent
         {
             _defaultGroundColor = _groundRenderer.material.color;
         }
-
-        // Определяем run-id (попытка получить из Academy). Если нет — fallback на timestamp.
-        string detectedRunId = null;
-        try
-        {
-            // Попытка получить свойство RunId через рефлексию (чтобы быть совместимым с разными версиями)
-            var academyType = typeof(Academy);
-            var prop = academyType.GetProperty("RunId");
-            if (prop != null)
-            {
-                var val = prop.GetValue(Academy.Instance, null);
-                detectedRunId = val as string;
-            }
-        }
-        catch
-        {
-            // ignore
-        }
-
-        if (string.IsNullOrEmpty(detectedRunId))
-        {
-            // fallback
-            detectedRunId = $"run_{DateTime.Now:yyyyMMdd_HHmmss}";
-        }
-
-        runIdForFile = detectedRunId;
-
-        // Путь к Result-папке в корне проекта (папка рядом с Assets)
-        string projectRoot = Path.GetDirectoryName(Application.dataPath);
-        string resultsDir = Path.Combine(projectRoot, "Results");
-        if (!Directory.Exists(resultsDir))
-        {
-            Directory.CreateDirectory(resultsDir);
-        }
-
-        metricsPath = Path.Combine(resultsDir, $"metrics_{runIdForFile}.csv");
-        
-
-        // Инициализируем файл (шапка) только один раз на run-id
-        lock (fileLock)
-        {
-            if (!initializedRuns.Contains(runIdForFile))
-            {
-                bool writeHeader = true;
-                // Если файл уже есть — не перезаписываем шапку
-                if (File.Exists(metricsPath))
-                {
-                    // Проверим не пуст ли файл
-                    var fi = new FileInfo(metricsPath);
-                    if (fi.Length > 0) writeHeader = false;
-                }
-
-                if (writeHeader)
-                {
-                    try
-                    {
-                        File.WriteAllText(metricsPath, "Episode,Success,Steps,Reward,PathDistance\n");
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError($"Failed to create metrics file '{metricsPath}': {e}");
-                    }
-                }
-
-                initializedRuns.Add(runIdForFile);
-            }
-        }
     }
 
     public override void OnEpisodeBegin()
     {
-        Debug.Log("OnEpisodeBegin()");
-
-        // Если у нас есть билд-скрипт уровня, можно регенерировать его здесь (по желанию).
-        // _segmentRouteBuilder?.RegenerateLevel();
-
         // Если SegmentRouteBuilder создал цель — используем её
         if (_segmentRouteBuilder != null && _segmentRouteBuilder.GoalTransform != null)
         {
@@ -290,12 +204,7 @@ public class MoveToGoalAgent : Agent
         MoveAgent(actions);
 
         // step penalty to encourage faster completion
-        //AddReward(-2f / MaxStep);
-
-        //AddReward(-0.01f);
-
-        float dynamicPenalty = Mathf.Lerp(-0.001f, -0.01f, (float)StepCount / MaxStep);
-        AddReward(dynamicPenalty);
+        AddReward(-2f / MaxStep);
 
         // update cumulative reward for display/debug
         CumulativeReward = GetCumulativeReward();
@@ -352,6 +261,20 @@ public class MoveToGoalAgent : Agent
         // track travelled distance
         episodeDistance += Vector3.Distance(transform.position, lastPos);
         lastPos = transform.position;
+
+        // reward for getting closer to the goal
+        if (_goal != null)
+        {
+            float currentDistance = Vector3.Distance(transform.position, _goal.position);
+            float distanceImprovement = _lastDistanceToGoal - currentDistance;
+
+            if (distanceImprovement > 0.01f) // значительное улучшение
+            {
+                AddReward(0.01f * distanceImprovement); // маленькая награда за прогресс
+            }
+
+            _lastDistanceToGoal = currentDistance;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -369,47 +292,25 @@ public class MoveToGoalAgent : Agent
 
         if (other.CompareTag("Checkpoint"))
         {
-            // Assumes each checkpoint has a Checkpoint component with TryActivate() that returns true once per episode
             var checkpoint = other.GetComponent<Checkpoint>();
-            if (checkpoint != null && checkpoint.TryActivate())
+            if (checkpoint != null)
             {
-                AddReward(0.5f);
-                Debug.Log($"Checkpoint reached: {other.name}");
+                if (_checkpointManager.TryReachCheckpoint(other.transform))
+                {
+                    // Первое прохождение - награда
+                    AddReward(0.2f);
+                    Debug.Log($"Checkpoint reached: {other.name}");
+                }
             }
         }
     }
 
-    // private void GoalReached()
-    // {
-    //     AddReward(2.0f);
-    //     AddReward(2f - (float)StepCount / MaxStep);
-
-    //     CumulativeReward = GetCumulativeReward();
-
-    //     episodeSuccess = true;
-    //     episodeReward = GetCumulativeReward();
-    //     episodeStepCount = StepCount;
-    //     pathDistance = episodeDistance;
-
-    //     // regenerate level if builder is present
-    //     if (_segmentRouteBuilder != null)
-    //     {
-    //         _segmentRouteBuilder?.RegenerateLevel();
-    //     }
-
-    //     EndEpisodeWithStats(true);
-    // }
-
-
     private void GoalReached()
     {
-        // float baseReward = 2.0f;
-        // float speedBonus = 2f * (1f - (float)StepCount / MaxStep); // от 0 до 2
-
+        float baseReward = 5.0f;
 
         float t = (float)StepCount / MaxStep;
-        float speedBonus = 2f * (1f - Mathf.Pow(t, 2)); // квадратичное усиление для быстрых
-
+        float speedBonus = 3f * (1f - Mathf.Pow(t, 2)); // квадратичное усиление для быстрых
 
         AddReward(baseReward);
         AddReward(speedBonus);
@@ -427,7 +328,6 @@ public class MoveToGoalAgent : Agent
         EndEpisodeWithStats(true);
     }
 
-
     private void FailEpisode()
     {
         AddReward(-0.5f);
@@ -441,21 +341,6 @@ public class MoveToGoalAgent : Agent
 
     private void EndEpisodeWithStats(bool success)
     {
-        // Write CSV line
-        string line = $"{CurrentEpisode},{(success ? 1 : 0)},{episodeStepCount},{episodeReward:F3},{pathDistance:F3}\n";
-        try
-        {
-            lock (fileLock)
-            {
-                // File.AppendAllText(metricsPath, line);
-                File.AppendAllText(metricsPath, $"{CompletedEpisodes.ToString(_ci)},{(success ? 1 : 0)},{StepCount.ToString(_ci)},{CumulativeReward.ToString(_ci)},{episodeDistance.ToString(_ci)}\n");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Failed to write metrics to '{metricsPath}': {e}");
-        }
-
         // Log to TensorBoard via StatsRecorder
         try
         {
@@ -464,10 +349,21 @@ public class MoveToGoalAgent : Agent
             stats.Add("episode/length", episodeStepCount);
             stats.Add("episode/distance", pathDistance);
             stats.Add("episode/reward", episodeReward);
+
+            // Дополнительные метрики
+            stats.Add("performance/success_rate_100", success ? 1f : 0f);
+            stats.Add("performance/steps_per_success", success ? episodeStepCount : 0f);
+            stats.Add("performance/distance_per_success", success ? pathDistance : 0f);
+
+            // Эффективность
+            if (success)
+            {
+                stats.Add("efficiency/steps_to_goal", episodeStepCount);
+                stats.Add("efficiency/distance_to_goal", pathDistance);
+            }
         }
         catch (Exception e)
         {
-            // don't break training if StatsRecorder not available
             Debug.LogWarning($"Failed to write stats to StatsRecorder: {e.Message}");
         }
 
