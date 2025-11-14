@@ -1,0 +1,65 @@
+{
+    "MoveToGoal": {
+        "checkpoints": [
+            {
+                "steps": 2999950,
+                "file_path": "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-2999950.onnx",
+                "reward": 6.194393262250882,
+                "creation_time": 1762686061.4926891,
+                "auxillary_file_paths": [
+                    "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-2999950.pt"
+                ]
+            },
+            {
+                "steps": 3000078,
+                "file_path": "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-3000078.onnx",
+                "reward": 6.194393262250882,
+                "creation_time": 1762686061.6134062,
+                "auxillary_file_paths": [
+                    "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-3000078.pt"
+                ]
+            },
+            {
+                "steps": 3499918,
+                "file_path": "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-3499918.onnx",
+                "reward": 2.3207133728728877,
+                "creation_time": 1762686467.18465,
+                "auxillary_file_paths": [
+                    "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-3499918.pt"
+                ]
+            },
+            {
+                "steps": 3999962,
+                "file_path": "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-3999962.onnx",
+                "reward": 4.5701118479868255,
+                "creation_time": 1762686782.4250774,
+                "auxillary_file_paths": [
+                    "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-3999962.pt"
+                ]
+            },
+            {
+                "steps": 4000090,
+                "file_path": "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-4000090.onnx",
+                "reward": 4.5701118479868255,
+                "creation_time": 1762686782.5373645,
+                "auxillary_file_paths": [
+                    "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-4000090.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 4000090,
+            "file_path": "results\\train_BC_Tuned03\\MoveToGoal.onnx",
+            "reward": 4.5701118479868255,
+            "creation_time": 1762686782.5373645,
+            "auxillary_file_paths": [
+                "results\\train_BC_Tuned03\\MoveToGoal\\MoveToGoal-4000090.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

@@ -72,7 +72,7 @@ engine_settings:
   no_graphics_monitor: false
 environment_parameters: null
 checkpoint_settings:
-  run_id: train_BC_Default_02
+  run_id: train_BC_Default_03_2
   initialize_from: null
   load_model: false
   resume: true

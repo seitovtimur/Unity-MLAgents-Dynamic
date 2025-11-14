@@ -1,0 +1,65 @@
+{
+    "MoveToGoal": {
+        "checkpoints": [
+            {
+                "steps": 2999902,
+                "file_path": "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-2999902.onnx",
+                "reward": 6.143198538709411,
+                "creation_time": 1762586610.051939,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-2999902.pt"
+                ]
+            },
+            {
+                "steps": 3000030,
+                "file_path": "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-3000030.onnx",
+                "reward": 6.143198538709411,
+                "creation_time": 1762586610.1643825,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-3000030.pt"
+                ]
+            },
+            {
+                "steps": 3499912,
+                "file_path": "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-3499912.onnx",
+                "reward": 6.560899501236586,
+                "creation_time": 1762587017.646033,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-3499912.pt"
+                ]
+            },
+            {
+                "steps": 3999895,
+                "file_path": "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-3999895.onnx",
+                "reward": 6.658371070080648,
+                "creation_time": 1762587364.7255156,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-3999895.pt"
+                ]
+            },
+            {
+                "steps": 4000023,
+                "file_path": "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-4000023.onnx",
+                "reward": 6.658371070080648,
+                "creation_time": 1762587364.8405905,
+                "auxillary_file_paths": [
+                    "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-4000023.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 4000023,
+            "file_path": "results\\train_PPO_Tuned01\\MoveToGoal.onnx",
+            "reward": 6.658371070080648,
+            "creation_time": 1762587364.8405905,
+            "auxillary_file_paths": [
+                "results\\train_PPO_Tuned01\\MoveToGoal\\MoveToGoal-4000023.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
