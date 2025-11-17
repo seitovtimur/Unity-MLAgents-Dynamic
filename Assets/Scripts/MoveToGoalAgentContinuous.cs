@@ -181,22 +181,17 @@ public class MoveToGoalAgentContinuous : Agent
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        var discreteActionsOut = actionsOut.DiscreteActions;
+        var continuousActionsOut = actionsOut.ContinuousActions;
 
-        // Move
-        discreteActionsOut[0] = Input.GetKey(KeyCode.UpArrow) ? 1 : 0;
+        // движение вперёд-назад
+        continuousActionsOut[0] = Input.GetKey(KeyCode.UpArrow) ? 1f :
+                                Input.GetKey(KeyCode.DownArrow) ? -1f : 0f;
 
-        // Rotate
-        if (Input.GetKey(KeyCode.LeftArrow))
-            discreteActionsOut[1] = 1;
-        else if (Input.GetKey(KeyCode.RightArrow))
-            discreteActionsOut[1] = 2;
-        else
-            discreteActionsOut[1] = 0;
-
-        // Jump disabled: always 0 (we removed jump from actions)
-        discreteActionsOut[2] = 0;
+        // поворот
+        continuousActionsOut[1] = Input.GetKey(KeyCode.LeftArrow) ? -1f :
+                                Input.GetKey(KeyCode.RightArrow) ? 1f : 0f;
     }
+
 
     // public override void OnActionReceived(ActionBuffers actions)
     // {
@@ -218,7 +213,10 @@ public class MoveToGoalAgentContinuous : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        //var cont = actions.ContinuousActions;
+
         var cont = actions.ContinuousActions;
+        Debug.Log($"Actions: move={cont[0]}, turn={cont[1]}");
 
         float move = Mathf.Clamp(cont[0], -1f, 1f);      // вперед–назад
         float turn = Mathf.Clamp(cont[1], -1f, 1f);      // поворот влево–вправоs
