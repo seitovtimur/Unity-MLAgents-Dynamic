@@ -5,7 +5,7 @@ behaviors:
     hyperparameters:
       # SAC работает с гораздо большим буфером, чем PPO
       batch_size: 1024
-      buffer_size: 200000
+      buffer_size: 50000
       learning_rate: 3.0e-4
       tau: 0.005
       steps_per_update: 1
@@ -13,7 +13,7 @@ behaviors:
 
     network_settings:
       normalize: true
-      hidden_units: 256
+      hidden_units: 128
       num_layers: 2
 
     reward_signals:

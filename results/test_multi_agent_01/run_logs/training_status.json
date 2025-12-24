@@ -1,0 +1,95 @@
+{
+    "Agent_PPO_Tuned": {
+        "checkpoints": [
+            {
+                "steps": 155,
+                "file_path": "results\\test_multi_agent_01\\Agent_PPO_Tuned\\Agent_PPO_Tuned-155.onnx",
+                "reward": 3.040492832660675,
+                "creation_time": 1766570143.2043798,
+                "auxillary_file_paths": [
+                    "results\\test_multi_agent_01\\Agent_PPO_Tuned\\Agent_PPO_Tuned-155.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 155,
+            "file_path": "results\\test_multi_agent_01\\Agent_PPO_Tuned.onnx",
+            "reward": 3.040492832660675,
+            "creation_time": 1766570143.2043798,
+            "auxillary_file_paths": [
+                "results\\test_multi_agent_01\\Agent_PPO_Tuned\\Agent_PPO_Tuned-155.pt"
+            ]
+        }
+    },
+    "Agent_BC": {
+        "checkpoints": [
+            {
+                "steps": 137,
+                "file_path": "results\\test_multi_agent_01\\Agent_BC\\Agent_BC-137.onnx",
+                "reward": 2.950404405593872,
+                "creation_time": 1766570143.2716002,
+                "auxillary_file_paths": [
+                    "results\\test_multi_agent_01\\Agent_BC\\Agent_BC-137.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 137,
+            "file_path": "results\\test_multi_agent_01\\Agent_BC.onnx",
+            "reward": 2.950404405593872,
+            "creation_time": 1766570143.2716002,
+            "auxillary_file_paths": [
+                "results\\test_multi_agent_01\\Agent_BC\\Agent_BC-137.pt"
+            ]
+        }
+    },
+    "Agent_PPO": {
+        "checkpoints": [
+            {
+                "steps": 167,
+                "file_path": "results\\test_multi_agent_01\\Agent_PPO\\Agent_PPO-167.onnx",
+                "reward": 2.973447233438492,
+                "creation_time": 1766570143.3373938,
+                "auxillary_file_paths": [
+                    "results\\test_multi_agent_01\\Agent_PPO\\Agent_PPO-167.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 167,
+            "file_path": "results\\test_multi_agent_01\\Agent_PPO.onnx",
+            "reward": 2.973447233438492,
+            "creation_time": 1766570143.3373938,
+            "auxillary_file_paths": [
+                "results\\test_multi_agent_01\\Agent_PPO\\Agent_PPO-167.pt"
+            ]
+        }
+    },
+    "Agent_GAIL": {
+        "checkpoints": [
+            {
+                "steps": 167,
+                "file_path": "results\\test_multi_agent_01\\Agent_GAIL\\Agent_GAIL-167.onnx",
+                "reward": 2.821109890937805,
+                "creation_time": 1766570143.4045217,
+                "auxillary_file_paths": [
+                    "results\\test_multi_agent_01\\Agent_GAIL\\Agent_GAIL-167.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 167,
+            "file_path": "results\\test_multi_agent_01\\Agent_GAIL.onnx",
+            "reward": 2.821109890937805,
+            "creation_time": 1766570143.4045217,
+            "auxillary_file_paths": [
+                "results\\test_multi_agent_01\\Agent_GAIL\\Agent_GAIL-167.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

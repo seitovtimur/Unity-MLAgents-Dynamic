@@ -1,5 +1,5 @@
 behaviors:
-  MoveToGoal:             
+  Agent_PPO_Tuned:             
     trainer_type: ppo
     hyperparameters:    
       batch_size: 2048        

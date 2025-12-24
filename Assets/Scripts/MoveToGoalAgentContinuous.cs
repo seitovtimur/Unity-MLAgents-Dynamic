@@ -216,7 +216,7 @@ public class MoveToGoalAgentContinuous : Agent
         //var cont = actions.ContinuousActions;
 
         var cont = actions.ContinuousActions;
-        Debug.Log($"Actions: move={cont[0]}, turn={cont[1]}");
+        //Debug.Log($"Actions: move={cont[0]}, turn={cont[1]}");
 
         float move = Mathf.Clamp(cont[0], -1f, 1f);      // вперед–назад
         float turn = Mathf.Clamp(cont[1], -1f, 1f);      // поворот влево–вправоs

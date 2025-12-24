@@ -10,6 +10,8 @@ TagManager:
   - FallZone
   - Obstacle
   - Checkpoint
+  - RotatingObstacle
+  - Agent
   layers:
   - Default
   - TransparentFX

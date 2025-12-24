@@ -203,7 +203,7 @@ MonoBehaviour:
   _groundRenderer: {fileID: 0}
   _checkpointManager: {fileID: 1650272141588129824}
   _segmentRouteBuilder: {fileID: 1375581600019582934}
-  _moveSpeed: 10
+  _moveSpeed: 50
   _rotationSpeed: 300
   CurrentEpisode: 0
   CumulativeReward: 0
