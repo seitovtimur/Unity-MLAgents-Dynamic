@@ -5,7 +5,7 @@ behaviors:
     hyperparameters:
       batch_size: 1024
       buffer_size: 10240
-      learning_rate: 0.0003
+      learning_rate: 0.0
       beta: 0.003
       epsilon: 0.2
       lambd: 0.95
@@ -82,13 +82,13 @@ engine_settings:
   no_graphics_monitor: false
 environment_parameters: null
 checkpoint_settings:
-  run_id: trainGAIL01
+  run_id: testGAIL01
   initialize_from: null
   load_model: false
-  resume: false
-  force: true
+  resume: true
+  force: false
   train_model: false
-  inference: false
+  inference: true
   results_dir: results
 torch_settings:
   device: null

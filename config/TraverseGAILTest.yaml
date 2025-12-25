@@ -20,9 +20,9 @@ behaviors:
     reward_signals:
       extrinsic:
         gamma: 0.99
-        strength: 0.6
+        strength: 0.8
       gail:
-        strength: 0.4
+        strength: 0.1
         gamma: 0.99
         demo_path: Demonstrations/traverseDemo1.demo
         use_actions: true
